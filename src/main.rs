@@ -1,11 +1,11 @@
-use std::{env, fs, io, path::{Path, PathBuf}, process};
+use std::{env, fs, io, path::{Path, PathBuf}};
 
 fn main() {
     let args: Vec<String> = env::args().collect();
 
     if args.len() != 3 {
         eprintln!("Usage: organize <source-directory> <target-directory>");
-        process::exit(1);
+        return;
     }
 
     let source = Path::new(&args[1]);
@@ -13,19 +13,19 @@ fn main() {
 
     if !source.exists() || !source.is_dir() {
         eprintln!("Erreur: Le dossier source n'existew pas ou n'est pas un dossier. ");
-        process::exit(1);
+        return;
     }
 
     if !target.exists() {
         if let Err(e) = fs::create_dir_all(&target) {
             eprintln!("Erreur lors de la creation du dossier cible: {}. ", e);
-            process::exit(1);
+            return;
         }
     }
 
     if let Err(e) = organize_files(source, target) {
         eprintln!("Erreur: {}. ", e);
-        process::exit(1);
+        return;
     }
 
     println!("Organisation terminee avec succes ! ");
